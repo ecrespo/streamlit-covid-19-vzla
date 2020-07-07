@@ -3,6 +3,7 @@ import plotly.express as px
 import pydeck as pdk
 import pandas as pd 
 import datetime
+import plotly.graph_objects as go
 
 import wget 
 import os
@@ -78,10 +79,23 @@ else:
     
     ageandgender = pd.read_csv(filepath2,skiprows=2,names=cols)
 
-            
-df1 = ageandgender.transpose()
-df1 
-    
+ages = ageandgender.drop(columns=['Confirmed Count','Confirmed Bygender Male','Confirmed Bygender Female']) 
+agelabels = list(ages.columns)
+
+agevalues = list(ages.iloc[0])
+fig = go.Figure(data=[go.Pie(labels=agelabels, values=agevalues)])
+st.write("## By Age covid-19 confirmed")
+st.plotly_chart(fig)
+labels = ['Female','Male']
+male = int(ageandgender.iloc[0][['Confirmed Bygender Male']])
+
+female = int(ageandgender.iloc[0][['Confirmed Bygender Female']])
+values = [female,male]
+fig = go.Figure(data=[go.Pie(labels=labels, values=values)])
+
+st.write("## Gender covid-19 confirmed")
+st.plotly_chart(fig)
+
 st.sidebar.markdown("""
         ### Data sources: 
         
