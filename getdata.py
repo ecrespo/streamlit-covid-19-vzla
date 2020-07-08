@@ -5,6 +5,18 @@ import datetime
 
 import wget 
 from pathlib import Path
+"""         
+### References: 
+* [docs streamlit.io](https://docs.streamlit.io/en/stable/getting_started.html#draw-charts-and-maps)
+* [Streamlit 101: An in-depth introduction](https://towardsdatascience.com/streamlit-101-an-in-depth-introduction-fc8aad9492f2)
+* [Learn How to Create Web Data Apps in Python](https://towardsdatascience.com/learn-how-to-create-web-data-apps-in-python-b50b624f4a0e)
+* [Build and deploy machine learning web app using PyCaret and Streamlit](https://towardsdatascience.com/build-and-deploy-machine-learning-web-app-using-pycaret-and-streamlit-28883a569104)
+* [Deploying ML web apps with Streamlit, Docker and AWS](https://medium.com/usf-msds/deploying-web-app-with-streamlit-docker-and-aws-72b0d4dbcf77)
+* [How to Deploy a Streamlit App using an Amazon Free ec2 instance?](https://towardsdatascience.com/how-to-deploy-a-streamlit-app-using-an-amazon-free-ec2-instance-416a41f69dc3)
+* [How to Create Interactive Visualisations in Python](https://towardsdatascience.com/how-to-create-interactive-visualisations-in-python-4af42cf83ba4)
+* [spacy-streamlit](https://github.com/explosion/spacy-streamlit)
+* [Chanin Nantasenamat ](https://github.com/dataprofessor/code/blob/master/streamlit/part3/penguins-app.py)
+"""
 
 path = "/home/ernesto/proyectos/streamlit-covid-19-vzla/covid19/csse_covid_19_data/csse_covid_19_daily_reports/"
 def ls3(path):
