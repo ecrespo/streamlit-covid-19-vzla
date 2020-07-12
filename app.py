@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 
 import wget 
 import os
-from getdata import getData,DataProcessor,GetCSV
+from getdata.getdata import getData,DataProcessor,GetCSV
 from constants import var 
 
 path = var["path"]
@@ -35,6 +35,51 @@ def main():
     countries = sorted(list(set(df["Country/Region"])))
     select_graph = ['Confirmed', 'Deaths', 'Recovered', 'Active', 'Case-Fatality_Ratio']
 
+    filename1 = f"bystate_historic_{datenow}.csv"
+    filepath1 = directory + filename1
+
+    if os.path.exists(filepath1):
+        bystate = pd.read_csv(filepath1)
+    else:
+        bystate = GetCSV(url1,filepath1)
+    
+    bystate["date"] = pd.to_datetime(bystate["date"])
+    bystate.set_index("date",inplace=True)
+    states = sorted(list(bystate.columns))
+    filename2 = f"Covid-19 confirmed cases by age and gender_{datenow}.csv"
+    filepath2 = directory + filename2
+    
+    if os.path.exists(filepath2):
+        elements = []
+        for item in pd.read_csv(filepath2).columns:
+            elements.append(str(item))
+            
+        cols = [item for item in elements]
+            
+        ageandgender = pd.read_csv(filepath2,skiprows=2,names=cols) 
+    else:
+        wget.download(url2,filepath2)
+        elements = []
+        for item in pd.read_csv(filepath2).columns:
+            elements.append(str(item))
+            
+        cols = [item for item in elements]
+            
+        ageandgender = pd.read_csv(filepath2,skiprows=2,names=cols)
+
+    ages = ageandgender.drop(columns=['Confirmed Count','Confirmed Bygender Male','Confirmed Bygender Female']) 
+    agelabels = list(ages.columns)
+
+    agevalues = list(ages.iloc[0])
+    
+    labels = ['Female','Male']
+    male = int(ageandgender.iloc[0][['Confirmed Bygender Male']])
+
+    female = int(ageandgender.iloc[0][['Confirmed Bygender Female']])
+    values = [female,male]
+    
+    
+    
     st.title(f" Covid-19 data Venezuela" )
     st.write(df[df["Country/Region"] == "Venezuela"][select_graph].tail(1))
     st.write(f"## Venezuela")
@@ -42,21 +87,7 @@ def main():
     st.line_chart(df[df["Country/Region"] == "Venezuela"][select_graph])
 
     if "States" in selects:
-        st.write("## States of Venezuela")    
-    
-
-        filename1 = f"bystate_historic_{datenow}.csv"
-        filepath1 = directory + filename1
-
-        if os.path.exists(filepath1):
-            bystate = pd.read_csv(filepath1)
-        else:
-            bystate = GetCSV(url1,filepath1)
-
-
-        bystate["date"] = pd.to_datetime(bystate["date"])
-        bystate.set_index("date",inplace=True)
-        states = sorted(list(bystate.columns))
+        st.write("## States of Venezuela")        
         st.line_chart(bystate)
         
     if "States" in selects and "State" in selects:
@@ -67,43 +98,14 @@ def main():
         st.write(bystate[option_state].tail(1))
         st.line_chart(bystate[option_state])
 
-    if "By Age" in selects:
-        
-        filename2 = f"Covid-19 confirmed cases by age and gender_{datenow}.csv"
-        filepath2 = directory + filename2
-        if os.path.exists(filepath2):
-            elements = []
-            for item in pd.read_csv(filepath2).columns:
-                elements.append(str(item))
-            
-            cols = [item for item in elements]
-            
-            ageandgender = pd.read_csv(filepath2,skiprows=2,names=cols) 
-        else:
-            wget.download(url2,filepath2)
-            elements = []
-            for item in pd.read_csv(filepath2).columns:
-                elements.append(str(item))
-            
-            cols = [item for item in elements]
-            
-            ageandgender = pd.read_csv(filepath2,skiprows=2,names=cols)
-
-        ages = ageandgender.drop(columns=['Confirmed Count','Confirmed Bygender Male','Confirmed Bygender Female']) 
-        agelabels = list(ages.columns)
-
-        agevalues = list(ages.iloc[0])
+    if "By Age" in selects:    
         fig = go.Figure(data=[go.Pie(labels=agelabels, values=agevalues)])
         st.write("## By Age covid-19 confirmed")
         st.plotly_chart(fig)
     
     if "By Age"in selects and "By Gender" in selects:
         
-        labels = ['Female','Male']
-        male = int(ageandgender.iloc[0][['Confirmed Bygender Male']])
-
-        female = int(ageandgender.iloc[0][['Confirmed Bygender Female']])
-        values = [female,male]
+        
         fig = go.Figure(data=[go.Pie(labels=labels, values=values)])
 
         st.write("## Gender covid-19 confirmed")
