@@ -17,6 +17,13 @@ from pathlib import Path
 * [spacy-streamlit](https://github.com/explosion/spacy-streamlit)
 * [Chanin Nantasenamat ](https://github.com/dataprofessor/code/blob/master/streamlit/part3/penguins-app.py)
 * [Deploy PyCaret and Streamlit app using AWS Fargate — serverless infrastructure](https://towardsdatascience.com/deploy-pycaret-and-streamlit-app-using-aws-fargate-serverless-infrastructure-8b7d7c0584c2)
+* [Turn your Jupyter Notebooks into a web app using Streamlit](https://medium.com/@shalinisinghzoots/turn-your-jupyter-notebooks-into-a-web-app-using-streamlit-414b76f1e094)
+* [How to build interactive dashboards in Python using Streamlit](https://towardsdatascience.com/how-to-build-interactive-dashboards-in-python-using-streamlit-1198d4f7061b)
+* [Web app for Interactive data exploration using Streamlit (fastest way to build Machine learning tools)](https://medium.com/analytics-vidhya/web-app-for-interactive-data-exploration-usig-streamlit-fastest-way-to-build-machine-learning-563783aa0a81)
+* [COVID-19 Dashboard in Python using Streamlit](https://medium.com/analytics-vidhya/covid-19-dashboard-in-python-using-streamlit-aa58581e5a7f)
+* [API Vzla](https://covid19.patria.org.ve/api-covid-19-venezuela/)
+* [Streamlit 101: An in-depth introduction](https://towardsdatascience.com/streamlit-101-an-in-depth-introduction-fc8aad9492f2)
+* [Streamlit](https://docs.streamlit.io/en/stable/api.html)
 """
 
 path = "./covid19/csse_covid_19_data/csse_covid_19_daily_reports/"
