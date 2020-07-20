@@ -17,38 +17,30 @@ start = var["start"]
 url1 = var["url1"]
 url2 = var["url2"]
 
-def main():
-    
-    st.sidebar.header('Graphs:')
-    select_graph = ["States","State","By Age","By Gender"]
-    selects = [item for item in select_graph if st.sidebar.checkbox(item)]
-    
-        
-    now = datetime.datetime.now()
-
-    datenow = now.strftime("%d-%m-%Y")
-
+@st.cache(allow_output_mutation=True)
+def getDF():
     df = getData(country=None,date=start)
     df = DataProcessor(df)
-
     df.drop(columns=[list(df.columns)[4]],inplace=True)
-    countries = sorted(list(set(df["Country/Region"])))
-    select_graph = ['Confirmed', 'Deaths', 'Recovered', 'Active', 'Case-Fatality_Ratio']
+    return df 
 
+@st.cache(allow_output_mutation=True)
+def getByState(datenow):
     filename1 = f"bystate_historic_{datenow}.csv"
     filepath1 = directory + filename1
-
     if os.path.exists(filepath1):
         bystate = pd.read_csv(filepath1)
     else:
         bystate = GetCSV(url1,filepath1)
-    
     bystate["date"] = pd.to_datetime(bystate["date"])
     bystate.set_index("date",inplace=True)
-    states = sorted(list(bystate.columns))
+    
+    return bystate 
+
+@st.cache(allow_output_mutation=True)
+def getByGender(datenow):
     filename2 = f"Covid-19 confirmed cases by age and gender_{datenow}.csv"
     filepath2 = directory + filename2
-    
     if os.path.exists(filepath2):
         elements = []
         for item in pd.read_csv(filepath2).columns:
@@ -66,10 +58,37 @@ def main():
         cols = [item for item in elements]
             
         ageandgender = pd.read_csv(filepath2,skiprows=2,names=cols)
+    
+    return ageandgender
 
+@st.cache(allow_output_mutation=True)
+def ProssData(bystate):
+    lastbystate = bystate.tail(1)
+    lastbystate.reset_index(inplace=True)
+    lastbystate.drop("date",axis=1,inplace=True)
+    states = list(lastbystate.columns)
+    values = list(dict(lastbystate.iloc[0]).values())
+    data = pd.DataFrame({
+            "index": states,
+            "cases": values
+        }).set_index('index')
+    return data 
+def main():
+    
+    st.sidebar.header('Graphs:')
+    select_graph = ["States","State","By Age","By Gender"]
+    selects = [item for item in select_graph if st.sidebar.checkbox(item)]    
+    now = datetime.datetime.now()
+    datenow = now.strftime("%d-%m-%Y")
+    df = getDF()
+    countries = sorted(list(set(df["Country/Region"])))
+    select_graph = ['Confirmed', 'Deaths', 'Recovered', 'Active', 'Case-Fatality_Ratio']
+    bystate = getByState(datenow)
+    states = sorted(list(bystate.columns))
+    
+    ageandgender = getByGender(datenow)
     ages = ageandgender.drop(columns=['Confirmed Count','Confirmed Bygender Male','Confirmed Bygender Female']) 
     agelabels = list(ages.columns)
-
     agevalues = list(ages.iloc[0])
     
     labels = ['Female','Male']
@@ -78,8 +97,6 @@ def main():
     female = int(ageandgender.iloc[0][['Confirmed Bygender Female']])
     values = [female,male]
     
-    
-    
     st.title(f" Covid-19 data Venezuela" )
     st.write(df[df["Country/Region"] == "Venezuela"][select_graph].tail(1))
     st.write(f"## Venezuela")
@@ -87,7 +104,9 @@ def main():
     st.line_chart(df[df["Country/Region"] == "Venezuela"][select_graph])
 
     if "States" in selects:
-        st.write("## States of Venezuela")        
+        st.write("## States of Venezuela")
+        data = ProssData(bystate)
+        st.bar_chart(data)
         st.line_chart(bystate)
         
     if "States" in selects and "State" in selects:
