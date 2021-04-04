@@ -26,7 +26,7 @@ from pathlib import Path
 """
 
 path = "./covid19/csse_covid_19_data/csse_covid_19_daily_reports/"
-
+path = "./Covid19/csse_covid_19_daily_reports/"
 
 def ls3(path):
     """
