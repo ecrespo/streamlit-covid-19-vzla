@@ -1,5 +1,3 @@
-data/
-data/*.csv
 __pycache__/
 .virtualenv/
 .virtualenv/*

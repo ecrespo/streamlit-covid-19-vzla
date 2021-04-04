@@ -47,6 +47,7 @@ def getData(country="Venezuela", date="03-13-2020", path=path, encoding="ISO-885
     :return df: Dataframe con los datos extraídos de los csv desde una fecha dada y para un país.
     """
     # Se obtiene los nombres de los archivos.
+    print("path: ",path)
     lista = [file for file in ls3(path) if file.split(".")[-1] == "csv"]
     # Se lee los archivos csv y se convierten en varios dataframe en un diccionario ordenados por fecha.
     df = {item.split(".")[0]: pd.read_csv(
