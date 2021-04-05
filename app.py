@@ -109,9 +109,10 @@ def main():
     
     st.write(df[df["Country/Region"] == "Venezuela"][select_graph].tail(1))
     st.write(f"## Venezuela")
-
-    st.line_chart(df[df["Country/Region"] == "Venezuela"][select_graph])
-
+    st.write(f"## Confirmed and Recovered")
+    st.line_chart(df[df["Country/Region"] == "Venezuela"][["Confirmed","Recovered"]])
+    st.write(f"## Deaths")
+    st.line_chart(df[df["Country/Region"] == "Venezuela"][['Deaths']])
     if "States" in selects:
         st.write("## States of Venezuela")
         data = ProssData(bystate)
