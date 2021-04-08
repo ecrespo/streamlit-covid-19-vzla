@@ -113,6 +113,8 @@ def main():
     st.line_chart(df[df["Country/Region"] == "Venezuela"][["Confirmed","Recovered"]])
     st.write(f"## Deaths")
     st.line_chart(df[df["Country/Region"] == "Venezuela"][['Deaths']])
+    st.write(f"## Case Fatality Ratio")
+    st.line_chart(df[df["Country/Region"] == "Venezuela"][['Case_Fatality_Ratio']])
     if "States" in selects:
         st.write("## States of Venezuela")
         data = ProssData(bystate)
