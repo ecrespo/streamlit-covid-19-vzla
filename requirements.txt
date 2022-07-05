@@ -6,3 +6,4 @@ numpydoc==0.9.2
 pydeck==0.4.0b2
 wget==3.2
 
+mistune>=2.0.3 # not directly required, pinned by Snyk to avoid a vulnerability
